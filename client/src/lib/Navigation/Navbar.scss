@@ -1,22 +1,51 @@
-.nav {
-  background-color: #2052F5;
-  width: 100%;
+.nav-parent {
+  background-color: #2052f5;
+  width: auto;
   height: auto;
-  padding-top: 10px;
-  padding-bottom: 10px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+.logo {
+  font-family: "Poppins", sans-serif;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 0;
+  margin: 0;
+}
+.button-parent {
+  //  margin-left: auto;
+  display: flex;
+  flex-direction: row;
+  width: 150px;
+  align-items: center;
+  justify-content: space-between;
+  //background-color: red;
 }
 .button {
-    font-family: "Poppins", sans-serif;
-    border: none;
-    cursor: pointer;
-    padding: 4px 8px;
-    border-radius: 6px;
-    box-shadow: rgba(0, 0, 0, 0.25) 0px 4px 4px 0px;
-    background: rgb(233, 231, 249);
-    font-stretch: normal;
-    font-style: normal;
-    font-size: 16px;
-    width: fit-content;
-    max-height: 42px;
-    color: rgb(30, 33, 104);
+  font-family: "Poppins", sans-serif;
+  border: none;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 4px 4px 0px;
+  background: rgb(233, 231, 249);
+  font-stretch: normal;
+  font-style: normal;
+  font-size: 16px;
+  width: fit-content;
+  min-width: 50px;
+  max-height: 42px;
+  color: rgb(30, 33, 104);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.button:hover {
+  background: rgb(218, 218, 228);
 }
