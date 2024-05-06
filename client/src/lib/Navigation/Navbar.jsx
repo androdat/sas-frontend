@@ -1,6 +1,8 @@
+import { useNavigate } from "react-router-dom";
 import React from "react";
 import "./Navbar.scss";
-const Navbar = ({ navToggle, setNavToggle }) => {
+const Navbar = () => {
+  const navigate = useNavigate();
   return (
     <div className="nav-parent">
       <p className="logo">Security Alarm System</p>
@@ -8,7 +10,7 @@ const Navbar = ({ navToggle, setNavToggle }) => {
         <div
           className="button"
           onClick={() => {
-            setNavToggle(true);
+            navigate("/");
           }}
         >
           Table
@@ -16,7 +18,7 @@ const Navbar = ({ navToggle, setNavToggle }) => {
         <div
           className="button"
           onClick={() => {
-            setNavToggle(false);
+            navigate("/map");
           }}
         >
           Map
