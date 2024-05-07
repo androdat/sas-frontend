@@ -7,10 +7,14 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import CircularProgress from "@mui/material/CircularProgress";
+import Box from "@mui/material/Box";
+import "./Table.scss";
 
 const TableComponent = ({ socket }) => {
   const [sensorData, setSensorData] = useState([]);
   const [apiErrorMessage, setApiErrorMessage] = useState(false);
+  const [loader, setLoader] = useState(false);
 
   useEffect(() => {
     handleGetAllData();
@@ -20,62 +24,59 @@ const TableComponent = ({ socket }) => {
     socket.on("sensorData", ({ eventName, data }) => {
       setApiErrorMessage(null);
       if (eventName === "sensorData") {
-        console.log(data);
         setSensorData((prevItems) => [...prevItems, ...data]);
-      }
-      if (eventName === "powerAnomalie") {
-        console.log("data from 3rd anomalie", data);
-        let updatedData = data;
-        //update prev data
-        console.log("updating prev values in table state variable");
-        setSensorData(prevData =>
-          prevData.map(item => {
-            const updatedItem = updatedData.find(updated => updated._id === item._id);
-            return updatedItem ? { ...item, anomalies: updatedItem.anomalies } : item;
-          })
-        );
       }
     });
   }, [socket]);
 
   const handleGetAllData = async () => {
-    console.log("Runnning handleGetAllData .....");
+    setLoader(true);
     try {
       let resp = await axios.get("http://localhost:4000/sensor");
-      console.log(resp.data.sensorData);
       setSensorData(resp.data.sensorData);
+      setLoader(false);
     } catch (err) {
-      console.log("Error fetching sensor data:", err);
-      console.log(err.response.data.message);
+      setLoader(false);
       setApiErrorMessage(err.response.data.message);
     }
   };
 
   return (
     <>
-      {!apiErrorMessage && (
-        <div>
+      {loader && (
+        <div className="loader">
+          <Box sx={{ display: "flex" }}>
+            <CircularProgress />
+          </Box>
+        </div>
+      )}
+      {!apiErrorMessage && !loader && (
+        <div className="table-parent">
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
               <TableHead>
                 <TableRow>
+                  <TableCell>Sno</TableCell>
                   <TableCell>Tower ID</TableCell>
                   <TableCell align="right">Latitude</TableCell>
                   <TableCell align="right">Longitude</TableCell>
                   <TableCell align="right">Temperature (°C)</TableCell>
                   <TableCell align="right">Fuel Status (Liters)</TableCell>
                   <TableCell align="right">Power Source</TableCell>
-                  <TableCell align="right">Anomalie</TableCell>
+                  <TableCell align="right">Anomaly</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {sensorData?.map((row) => (
+                {sensorData?.map((row, index) => (
                   <TableRow
                     key={row._id}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     <TableCell component="th" scope="row">
-                      {row._id}
+                      {index + 1}
+                    </TableCell>
+                    <TableCell component="th" scope="row">
+                      {row.tower_id ? row.tower_id : row._id}
                     </TableCell>
                     <TableCell align="right">{row.lat}</TableCell>
                     <TableCell align="right">{row.lng}</TableCell>
@@ -94,7 +95,7 @@ const TableComponent = ({ socket }) => {
       )}
 
       {apiErrorMessage && (
-        <div>
+        <div className="err-msg">
           <p>{apiErrorMessage}</p>
         </div>
       )}

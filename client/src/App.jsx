@@ -13,8 +13,6 @@ const App = () => {
     transports: ["websocket"],
   };
   const socket = io.connect("http://localhost:4000", connectionOptions);
-  console.log(socket);
-  const [navToggle, setNavToggle] = useState(true);
   return (
     <>
       <Navbar />
